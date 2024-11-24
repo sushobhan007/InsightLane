@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
         this.userRepository.delete(user);
+        System.out.println("User is deleted for the userId: %s" + userId);
     }
 
     private User getUserFromUserDto(UserDto userDto) {
