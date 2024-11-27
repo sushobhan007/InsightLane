@@ -1,6 +1,7 @@
 package com.blog.insight_lane.services;
 
 import com.blog.insight_lane.entities.User;
+import com.blog.insight_lane.exceptions.DuplicateResourceException;
 import com.blog.insight_lane.exceptions.ResourceNotFoundException;
 import com.blog.insight_lane.payloads.UserDto;
 import com.blog.insight_lane.repositories.UserRepository;
@@ -16,6 +17,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+        String email = userDto.getEmail();
+        this.userRepository
+                .findByEmail(email)
+                .ifPresent(existingUser -> {
+                    System.out.println("User is already present with the email: " + email);
+                    throw new DuplicateResourceException("User", " Email ", email);
+                });
         User savedUser = this.userRepository.save(getUserFromUserDto(userDto));
 
         UserDto savedUserDto = this.getUserDtoFromUser(savedUser);
