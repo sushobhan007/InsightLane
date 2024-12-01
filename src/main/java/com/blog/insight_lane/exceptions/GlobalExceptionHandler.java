@@ -3,8 +3,13 @@ package com.blog.insight_lane.exceptions;
 import com.blog.insight_lane.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,5 +26,19 @@ public class GlobalExceptionHandler {
         String message = exception.getMessage();
         ApiResponse apiResponse = new ApiResponse(message, false);
         return new ResponseEntity<>(apiResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> methodArgsNotValidExceptionHandler(
+            MethodArgumentNotValidException exception) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        exception.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            responseMap.put(fieldName, errorMessage);
+        });
+
+        return new ResponseEntity<>(responseMap, HttpStatus.BAD_REQUEST);
     }
 }
