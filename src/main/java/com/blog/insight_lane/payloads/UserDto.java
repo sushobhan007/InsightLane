@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDto {
-    private int id;
+    private Integer id;
 
     @NotEmpty
     private String name;

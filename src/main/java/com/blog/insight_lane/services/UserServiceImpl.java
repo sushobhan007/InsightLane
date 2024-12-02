@@ -28,9 +28,9 @@ public class UserServiceImpl implements UserService {
                     System.out.println("User is already present with the email: " + email);
                     throw new DuplicateResourceException("User", " Email ", email);
                 });
-        User savedUser = this.userRepository.save(getUserFromUserDto(userDto));
+        User savedUser = this.userRepository.save(toUser(userDto));
 
-        UserDto savedUserDto = this.getUserDtoFromUser(savedUser);
+        UserDto savedUserDto = this.toUserDto(savedUser);
         System.out.println(String.format("New user is created. %nName: %s, " +
                 "%nEmail: %s", savedUserDto.getId(), savedUserDto.getEmail()));
         return savedUserDto;
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         User updatedUser = this.userRepository.save(user);
 
         System.out.println("User details are updated for the userId: %s" + userId);
-        return this.getUserDtoFromUser(updatedUser);
+        return this.toUserDto(updatedUser);
     }
 
     @Override
@@ -57,13 +57,13 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-        return this.getUserDtoFromUser(user);
+        return this.toUserDto(user);
     }
 
     @Override
     public List<UserDto> getAllUser() {
         List<User> userList = this.userRepository.findAll();
-        return userList.stream().map(user -> this.getUserDtoFromUser(user)).toList();
+        return userList.stream().map(user -> this.toUserDto(user)).toList();
     }
 
     @Override
@@ -75,11 +75,11 @@ public class UserServiceImpl implements UserService {
         System.out.println("User is deleted for the userId: %s" + userId);
     }
 
-    private User getUserFromUserDto(UserDto userDto) {
+    private User toUser(UserDto userDto) {
         return this.modelMapper.map(userDto, User.class);
     }
 
-    private UserDto getUserDtoFromUser(User user) {
+    private UserDto toUserDto(User user) {
         return this.modelMapper.map(user, UserDto.class);
     }
 }
