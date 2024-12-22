@@ -10,10 +10,12 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class PostDto {
+    private Integer postId;
     private String title;
     private String content;
     private String imageName;
     private Date creationDate;
+    private Date lastUpdationDate;
     private CategoryDto category;
     private UserDto user;
 }
