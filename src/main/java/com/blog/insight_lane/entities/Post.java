@@ -20,7 +20,7 @@ public class Post {
     @Column(length = 100, nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(length = 5000, nullable = false)
     private String content;
     private String imageName;
     private Date creationDate;
