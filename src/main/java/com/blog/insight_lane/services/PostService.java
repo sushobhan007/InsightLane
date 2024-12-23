@@ -1,6 +1,7 @@
 package com.blog.insight_lane.services;
 
 import com.blog.insight_lane.payloads.PostDto;
+import com.blog.insight_lane.payloads.PostResponse;
 
 import java.util.List;
 
@@ -11,11 +12,11 @@ public interface PostService {
 
     PostDto getPost(Integer postId);
 
-    List<PostDto> getAllPost(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    List<PostDto> getAllPostByCategory(Integer categoryId);
+    PostResponse getAllPostByCategory(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    List<PostDto> getAllPostByUser(Integer userId);
+    PostResponse getAllPostByUser(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     List<PostDto> searchPosts(String keyword);
 

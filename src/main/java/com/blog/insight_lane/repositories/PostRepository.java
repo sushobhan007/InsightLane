@@ -3,12 +3,12 @@ package com.blog.insight_lane.repositories;
 import com.blog.insight_lane.entities.Category;
 import com.blog.insight_lane.entities.Post;
 import com.blog.insight_lane.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface PostRepository extends JpaRepository<Post, Integer> {
-    List<Post> findByUser(User user);
+    Page<Post> findByUser(User user, Pageable pageable);
 
-    List<Post> findByCategory(Category category);
+    Page<Post> findByCategory(Category category, Pageable pageable);
 }
