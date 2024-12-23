@@ -12,11 +12,11 @@ public interface PostService {
 
     PostDto getPost(Integer postId);
 
-    PostResponse getAllPost(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    PostResponse getAllPostByCategory(Integer categoryId, Integer pageNumber, Integer pageSize);
+    PostResponse getAllPostByCategory(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    PostResponse getAllPostByUser(Integer userId, Integer pageNumber, Integer pageSize);
+    PostResponse getAllPostByUser(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     List<PostDto> searchPosts(String keyword);
 

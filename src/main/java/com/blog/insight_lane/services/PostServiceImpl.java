@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -81,8 +82,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize,
+                "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending()
+        );
         Page<Post> postPage = this.postRepository.findAll(pageable);
         List<Post> postList = postPage.getContent();
         List<PostDto> postDtoList = postList.stream().map(post -> toPostDto(post)).toList();
@@ -92,12 +97,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPostByCategory(Integer categoryId, Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPostByCategory(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Category category = this.categoryRepository
                 .findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", " Category Id ", categoryId));
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize,
+                "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending()
+        );
         Page<Post> postPage = this.postRepository.findByCategory(category, pageable);
         List<PostDto> postDtoList = postPage.stream().map(post -> toPostDto(post)).toList();
 
@@ -106,12 +115,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPostByUser(Integer userId, Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPostByUser(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         User user = this.userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", " User Id ", userId));
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize,
+                "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending()
+        );
         Page<Post> postPage = this.postRepository.findByUser(user, pageable);
         List<PostDto> postDtoList = postPage.stream().map(post -> toPostDto(post)).toList();
 
