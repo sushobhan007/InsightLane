@@ -10,6 +10,9 @@ import com.blog.insight_lane.repositories.PostRepository;
 import com.blog.insight_lane.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,6 +39,9 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", " User Id ", userId));
         Category category = this.categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", " Category Id ", categoryId));
+        if (postDto.getContent().length() > 5000) {
+            throw new IllegalArgumentException("Content exceeds the maximum allowed length of 5000 characters.");
+        }
         Post post = toPost(postDto);
         post.setImageName("default.png");
         post.setCreationDate(new Date());
@@ -74,8 +80,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
-        List<Post> postList = this.postRepository.findAll();
+    public List<PostDto> getAllPost(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> postPage = this.postRepository.findAll(pageable);
+        List<Post> postList = postPage.getContent();
         return postList.stream().map(post -> toPostDto(post)).toList();
     }
 
