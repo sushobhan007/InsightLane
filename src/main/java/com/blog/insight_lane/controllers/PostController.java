@@ -70,4 +70,14 @@ public class PostController {
         return new ResponseEntity<>(
                 new ApiResponse("The post is deleted successfully", true), HttpStatus.OK);
     }
+
+    @GetMapping("/posts/search")
+    ResponseEntity<PostResponse> searchPostByTitle(@RequestParam(value = "keyword") String keyword,
+                                                   @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+                                                   @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+                                                   @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+                                                   @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+        PostResponse response = this.postService.searchPosts(keyword, pageNumber, pageSize, sortBy, sortOrder);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

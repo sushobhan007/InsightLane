@@ -133,8 +133,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> searchPosts(String keyword) {
-        return List.of();
+    public PostResponse searchPosts(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize,
+                "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending()
+        );
+
+        Page<Post> postPage = this.postRepository.findByTitleContaining(keyword, pageable);
+        List<PostDto> postDtoList = postPage.stream().map(post -> toPostDto(post)).toList();
+
+        PostResponse response = setPostResponse(postDtoList, postPage);
+        return response;
     }
 
     @Override
