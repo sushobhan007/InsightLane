@@ -4,6 +4,7 @@ import com.blog.insight_lane.payloads.PostDto;
 import com.blog.insight_lane.payloads.PostResponse;
 import com.blog.insight_lane.response.ApiResponse;
 import com.blog.insight_lane.services.PostService;
+import com.blog.insight_lane.utils.PostUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,30 +31,54 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-                                             @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-                                             @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+    ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber",
+            defaultValue = PostUtility.DEFAULT_PAGE_NUMBER,
+            required = false) Integer pageNumber,
+                                             @RequestParam(value = "pageSize",
+                                                     defaultValue = PostUtility.DEFAULT_PAGE_SIZE,
+                                                     required = false) Integer pageSize,
+                                             @RequestParam(value = "sortBy",
+                                                     defaultValue = PostUtility.DEFAULT_SORT_BY,
+                                                     required = false) String sortBy,
+                                             @RequestParam(value = "sortOrder",
+                                                     defaultValue = PostUtility.DEFAULT_SORT_ORDER,
+                                                     required = false) String sortOrder) {
         PostResponse response = this.postService.getAllPost(pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/category/{categoryId}/posts")
     ResponseEntity<PostResponse> getPostByCategory(@PathVariable Integer categoryId,
-                                                   @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                                   @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-                                                   @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-                                                   @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+                                                   @RequestParam(value = "pageNumber",
+                                                           defaultValue = PostUtility.DEFAULT_PAGE_NUMBER,
+                                                           required = false) Integer pageNumber,
+                                                   @RequestParam(value = "pageSize",
+                                                           defaultValue = PostUtility.DEFAULT_PAGE_SIZE,
+                                                           required = false) Integer pageSize,
+                                                   @RequestParam(value = "sortBy",
+                                                           defaultValue = PostUtility.DEFAULT_SORT_BY,
+                                                           required = false) String sortBy,
+                                                   @RequestParam(value = "sortOrder",
+                                                           defaultValue = PostUtility.DEFAULT_SORT_ORDER,
+                                                           required = false) String sortOrder) {
         PostResponse response = this.postService.getAllPostByCategory(categoryId, pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}/posts")
     ResponseEntity<PostResponse> getPostByUser(@PathVariable Integer userId,
-                                               @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                               @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-                                               @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-                                               @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+                                               @RequestParam(value = "pageNumber",
+                                                       defaultValue = PostUtility.DEFAULT_PAGE_NUMBER,
+                                                       required = false) Integer pageNumber,
+                                               @RequestParam(value = "pageSize",
+                                                       defaultValue = PostUtility.DEFAULT_PAGE_SIZE,
+                                                       required = false) Integer pageSize,
+                                               @RequestParam(value = "sortBy",
+                                                       defaultValue = PostUtility.DEFAULT_SORT_BY,
+                                                       required = false) String sortBy,
+                                               @RequestParam(value = "sortOrder",
+                                                       defaultValue = PostUtility.DEFAULT_SORT_ORDER,
+                                                       required = false) String sortOrder) {
         PostResponse response = this.postService.getAllPostByUser(userId, pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -73,10 +98,18 @@ public class PostController {
 
     @GetMapping("/posts/search")
     ResponseEntity<PostResponse> searchPostByTitle(@RequestParam(value = "keyword") String keyword,
-                                                   @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                                   @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-                                                   @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-                                                   @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+                                                   @RequestParam(value = "pageNumber",
+                                                           defaultValue = PostUtility.DEFAULT_PAGE_NUMBER,
+                                                           required = false) Integer pageNumber,
+                                                   @RequestParam(value = "pageSize",
+                                                           defaultValue = PostUtility.DEFAULT_PAGE_SIZE,
+                                                           required = false) Integer pageSize,
+                                                   @RequestParam(value = "sortBy",
+                                                           defaultValue = PostUtility.DEFAULT_SORT_BY,
+                                                           required = false) String sortBy,
+                                                   @RequestParam(value = "sortOrder",
+                                                           defaultValue = PostUtility.DEFAULT_SORT_ORDER,
+                                                           required = false) String sortOrder) {
         PostResponse response = this.postService.searchPosts(keyword, pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
