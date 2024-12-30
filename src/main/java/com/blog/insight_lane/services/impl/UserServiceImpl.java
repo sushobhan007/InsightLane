@@ -1,10 +1,11 @@
-package com.blog.insight_lane.services;
+package com.blog.insight_lane.services.impl;
 
 import com.blog.insight_lane.entities.User;
 import com.blog.insight_lane.exceptions.DuplicateResourceException;
 import com.blog.insight_lane.exceptions.ResourceNotFoundException;
 import com.blog.insight_lane.payloads.UserDto;
 import com.blog.insight_lane.repositories.UserRepository;
+import com.blog.insight_lane.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

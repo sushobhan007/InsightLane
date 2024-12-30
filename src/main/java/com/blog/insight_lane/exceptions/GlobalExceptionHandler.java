@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
+import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -40,5 +41,17 @@ public class GlobalExceptionHandler {
         });
 
         return new ResponseEntity<>(responseMap, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidPropertiesFormatException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidPropertiesFormatException(
+            InvalidPropertiesFormatException exception) {
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("provided", exception.getMessage());
+        response.put("message", "Provided file format is invalid");
+        response.put("valid format", "jpg, jpeg, png");
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

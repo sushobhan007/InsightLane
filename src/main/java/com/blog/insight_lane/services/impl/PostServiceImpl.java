@@ -1,4 +1,4 @@
-package com.blog.insight_lane.services;
+package com.blog.insight_lane.services.impl;
 
 import com.blog.insight_lane.entities.Category;
 import com.blog.insight_lane.entities.Post;
@@ -9,6 +9,7 @@ import com.blog.insight_lane.payloads.PostResponse;
 import com.blog.insight_lane.repositories.CategoryRepository;
 import com.blog.insight_lane.repositories.PostRepository;
 import com.blog.insight_lane.repositories.UserRepository;
+import com.blog.insight_lane.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
