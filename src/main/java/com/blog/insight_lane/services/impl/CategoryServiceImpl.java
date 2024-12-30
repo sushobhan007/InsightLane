@@ -1,9 +1,10 @@
-package com.blog.insight_lane.services;
+package com.blog.insight_lane.services.impl;
 
 import com.blog.insight_lane.entities.Category;
 import com.blog.insight_lane.exceptions.ResourceNotFoundException;
 import com.blog.insight_lane.payloads.CategoryDto;
 import com.blog.insight_lane.repositories.CategoryRepository;
+import com.blog.insight_lane.services.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
