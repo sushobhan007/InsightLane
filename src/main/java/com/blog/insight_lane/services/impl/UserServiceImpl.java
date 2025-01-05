@@ -6,6 +6,7 @@ import com.blog.insight_lane.exceptions.ResourceNotFoundException;
 import com.blog.insight_lane.payloads.UserDto;
 import com.blog.insight_lane.repositories.UserRepository;
 import com.blog.insight_lane.services.UserService;
+import com.blog.insight_lane.utils.ModelMapperUtility;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,9 @@ public class UserServiceImpl implements UserService {
                     System.out.println("User is already present with the email: " + email);
                     throw new DuplicateResourceException("User", " Email ", email);
                 });
-        User savedUser = this.userRepository.save(toUser(userDto));
+        User savedUser = this.userRepository.save(ModelMapperUtility.toUser(userDto));
 
-        UserDto savedUserDto = this.toUserDto(savedUser);
+        UserDto savedUserDto = ModelMapperUtility.toUserDto(savedUser);
         System.out.println(String.format("New user is created. %nName: %s, " +
                 "%nEmail: %s", savedUserDto.getId(), savedUserDto.getEmail()));
         return savedUserDto;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
         User updatedUser = this.userRepository.save(user);
 
         System.out.println("User details are updated for the userId: %s" + userId);
-        return this.toUserDto(updatedUser);
+        return ModelMapperUtility.toUserDto(updatedUser);
     }
 
     @Override
@@ -58,13 +59,13 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-        return this.toUserDto(user);
+        return ModelMapperUtility.toUserDto(user);
     }
 
     @Override
     public List<UserDto> getAllUser() {
         List<User> userList = this.userRepository.findAll();
-        return userList.stream().map(user -> this.toUserDto(user)).toList();
+        return userList.stream().map(user -> ModelMapperUtility.toUserDto(user)).toList();
     }
 
     @Override
@@ -74,13 +75,5 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
         this.userRepository.delete(user);
         System.out.println("User is deleted for the userId: %s" + userId);
-    }
-
-    private User toUser(UserDto userDto) {
-        return this.modelMapper.map(userDto, User.class);
-    }
-
-    private UserDto toUserDto(User user) {
-        return this.modelMapper.map(user, UserDto.class);
     }
 }
