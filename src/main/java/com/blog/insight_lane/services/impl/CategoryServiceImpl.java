@@ -5,6 +5,7 @@ import com.blog.insight_lane.exceptions.ResourceNotFoundException;
 import com.blog.insight_lane.payloads.CategoryDto;
 import com.blog.insight_lane.repositories.CategoryRepository;
 import com.blog.insight_lane.services.CategoryService;
+import com.blog.insight_lane.utils.ModelMapperUtility;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
 
-        Category savedCategory = this.categoryRepository.save(toCategory(categoryDto));
+        Category savedCategory = this.categoryRepository.save(ModelMapperUtility.toCategory(categoryDto));
 
-        CategoryDto savedCategoryDto = this.toCategoryDto(savedCategory);
+        CategoryDto savedCategoryDto = ModelMapperUtility.toCategoryDto(savedCategory);
         System.out.println(String.format("Category named: %s is saved successfully", savedCategoryDto.getCategoryName()));
 
         return savedCategoryDto;
@@ -41,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category updatedCategory = this.categoryRepository.save(category);
 
         System.out.println("Category details are updated for the categoryId: %s" + categoryId);
-        return this.toCategoryDto(updatedCategory);
+        return ModelMapperUtility.toCategoryDto(updatedCategory);
     }
 
     @Override
@@ -49,13 +50,13 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = this.categoryRepository
                 .findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", " Category Id ", categoryId));
-        return this.toCategoryDto(category);
+        return ModelMapperUtility.toCategoryDto(category);
     }
 
     @Override
     public List<CategoryDto> getAllCategory() {
         List<Category> categoryList = this.categoryRepository.findAll();
-        return categoryList.stream().map(category -> this.toCategoryDto(category)).toList();
+        return categoryList.stream().map(category -> ModelMapperUtility.toCategoryDto(category)).toList();
     }
 
     @Override
@@ -65,13 +66,5 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category", " Category Id ", categoryId));
         this.categoryRepository.delete(category);
         System.out.println("Category is deleted for the categoryId: %s" + categoryId);
-    }
-
-    private Category toCategory(CategoryDto categoryDto) {
-        return this.modelMapper.map(categoryDto, Category.class);
-    }
-
-    private CategoryDto toCategoryDto(Category category) {
-        return this.modelMapper.map(category, CategoryDto.class);
     }
 }

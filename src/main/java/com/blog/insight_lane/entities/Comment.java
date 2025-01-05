@@ -15,11 +15,14 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commentId;
+
+    @Column(length = 300, nullable = false)
     private String content;
 
     @ManyToOne
     private Post post;
 
-//    private User userId;
+    @ManyToOne
+    private User user;
 
 }
