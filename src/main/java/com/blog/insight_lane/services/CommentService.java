@@ -7,5 +7,5 @@ public interface CommentService {
 
     void deleteComment(Integer commentId);
 
-    CommentDto updateComment(CommentDto commentDto, Integer commentId, Integer postId);
+    CommentDto updateComment(CommentDto commentDto, Integer commentId);
 }
