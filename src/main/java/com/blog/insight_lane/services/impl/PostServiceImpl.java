@@ -11,7 +11,6 @@ import com.blog.insight_lane.repositories.PostRepository;
 import com.blog.insight_lane.repositories.UserRepository;
 import com.blog.insight_lane.services.PostService;
 import com.blog.insight_lane.utils.ModelMapperUtility;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +34,7 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapperUtility modelMapperUtility;
 
     @Override
     public PostDto createPost(PostDto postDto, Integer userId, Integer categoryId) {
@@ -46,7 +45,7 @@ public class PostServiceImpl implements PostService {
         if (postDto.getContent().length() > 5000) {
             throw new IllegalArgumentException("Content exceeds the maximum allowed length of 5000 characters.");
         }
-        Post post = ModelMapperUtility.toPost(postDto);
+        Post post = modelMapperUtility.toPost(postDto);
         post.setImageName("default.png");
         post.setCreationDate(new Date());
         post.setLastUpdationDate(new Date());
@@ -57,7 +56,7 @@ public class PostServiceImpl implements PostService {
         System.out.printf("User: %s has created a post successfully to the Category: %s%n",
                 user.getName(),
                 category.getCategoryName());
-        return ModelMapperUtility.toPostDto(savedPost);
+        return modelMapperUtility.toPostDto(savedPost);
 
     }
 
@@ -72,7 +71,7 @@ public class PostServiceImpl implements PostService {
         post.setLastUpdationDate(new Date());
 
         Post updatedPost = this.postRepository.save(post);
-        return ModelMapperUtility.toPostDto(updatedPost);
+        return modelMapperUtility.toPostDto(updatedPost);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class PostServiceImpl implements PostService {
         Post post = this.postRepository
                 .findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", " Post Id ", postId));
-        return ModelMapperUtility.toPostDto(post);
+        return modelMapperUtility.toPostDto(post);
     }
 
     @Override
@@ -92,7 +91,7 @@ public class PostServiceImpl implements PostService {
         );
         Page<Post> postPage = this.postRepository.findAll(pageable);
         List<Post> postList = postPage.getContent();
-        List<PostDto> postDtoList = postList.stream().map(post -> ModelMapperUtility.toPostDto(post)).toList();
+        List<PostDto> postDtoList = postList.stream().map(post -> modelMapperUtility.toPostDto(post)).toList();
 
         PostResponse response = setPostResponse(postDtoList, postPage);
         return response;
@@ -110,7 +109,7 @@ public class PostServiceImpl implements PostService {
                 "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending()
         );
         Page<Post> postPage = this.postRepository.findByCategory(category, pageable);
-        List<PostDto> postDtoList = postPage.stream().map(post -> ModelMapperUtility.toPostDto(post)).toList();
+        List<PostDto> postDtoList = postPage.stream().map(post -> modelMapperUtility.toPostDto(post)).toList();
 
         PostResponse response = setPostResponse(postDtoList, postPage);
         return response;
@@ -128,7 +127,7 @@ public class PostServiceImpl implements PostService {
                 "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending()
         );
         Page<Post> postPage = this.postRepository.findByUser(user, pageable);
-        List<PostDto> postDtoList = postPage.stream().map(post -> ModelMapperUtility.toPostDto(post)).toList();
+        List<PostDto> postDtoList = postPage.stream().map(post -> modelMapperUtility.toPostDto(post)).toList();
 
         PostResponse response = setPostResponse(postDtoList, postPage);
         return response;
@@ -144,7 +143,7 @@ public class PostServiceImpl implements PostService {
         );
 
         Page<Post> postPage = this.postRepository.findByTitleContaining(keyword, pageable);
-        List<PostDto> postDtoList = postPage.stream().map(post -> ModelMapperUtility.toPostDto(post)).toList();
+        List<PostDto> postDtoList = postPage.stream().map(post -> modelMapperUtility.toPostDto(post)).toList();
 
         PostResponse response = setPostResponse(postDtoList, postPage);
         return response;
