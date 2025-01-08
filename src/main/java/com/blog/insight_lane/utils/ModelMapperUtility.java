@@ -10,40 +10,42 @@ import com.blog.insight_lane.payloads.PostDto;
 import com.blog.insight_lane.payloads.UserDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ModelMapperUtility {
     @Autowired
-    private static ModelMapper modelMapper;
+    public ModelMapper modelMapper;
 
-    public static Comment toComment(CommentDto commentDto) {
+    public Comment toComment(CommentDto commentDto) {
         return modelMapper.map(commentDto, Comment.class);
     }
 
-    public static CommentDto toCommentDto(Comment comment) {
+    public CommentDto toCommentDto(Comment comment) {
         return modelMapper.map(comment, CommentDto.class);
     }
 
-    public static Category toCategory(CategoryDto categoryDto) {
+    public Category toCategory(CategoryDto categoryDto) {
         return modelMapper.map(categoryDto, Category.class);
     }
 
-    public static CategoryDto toCategoryDto(Category category) {
+    public CategoryDto toCategoryDto(Category category) {
         return modelMapper.map(category, CategoryDto.class);
     }
 
-    public static Post toPost(PostDto postDto) {
+    public Post toPost(PostDto postDto) {
         return modelMapper.map(postDto, Post.class);
     }
 
-    public static PostDto toPostDto(Post post) {
+    public PostDto toPostDto(Post post) {
         return modelMapper.map(post, PostDto.class);
     }
 
-    public static User toUser(UserDto userDto) {
+    public User toUser(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
     }
 
-    public static UserDto toUserDto(User user) {
+    public UserDto toUserDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
 }

@@ -7,7 +7,6 @@ import com.blog.insight_lane.payloads.UserDto;
 import com.blog.insight_lane.repositories.UserRepository;
 import com.blog.insight_lane.services.UserService;
 import com.blog.insight_lane.utils.ModelMapperUtility;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapperUtility modelMapperUtility;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -30,9 +29,9 @@ public class UserServiceImpl implements UserService {
                     System.out.println("User is already present with the email: " + email);
                     throw new DuplicateResourceException("User", " Email ", email);
                 });
-        User savedUser = this.userRepository.save(ModelMapperUtility.toUser(userDto));
+        User savedUser = this.userRepository.save(modelMapperUtility.toUser(userDto));
 
-        UserDto savedUserDto = ModelMapperUtility.toUserDto(savedUser);
+        UserDto savedUserDto = modelMapperUtility.toUserDto(savedUser);
         System.out.println(String.format("New user is created. %nName: %s, " +
                 "%nEmail: %s", savedUserDto.getId(), savedUserDto.getEmail()));
         return savedUserDto;
@@ -51,7 +50,7 @@ public class UserServiceImpl implements UserService {
         User updatedUser = this.userRepository.save(user);
 
         System.out.println("User details are updated for the userId: %s" + userId);
-        return ModelMapperUtility.toUserDto(updatedUser);
+        return modelMapperUtility.toUserDto(updatedUser);
     }
 
     @Override
@@ -59,13 +58,13 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-        return ModelMapperUtility.toUserDto(user);
+        return modelMapperUtility.toUserDto(user);
     }
 
     @Override
     public List<UserDto> getAllUser() {
         List<User> userList = this.userRepository.findAll();
-        return userList.stream().map(user -> ModelMapperUtility.toUserDto(user)).toList();
+        return userList.stream().map(user -> modelMapperUtility.toUserDto(user)).toList();
     }
 
     @Override
